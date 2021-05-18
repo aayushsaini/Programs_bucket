@@ -1,0 +1,2 @@
+
+        cout << numbers[i] << " ";
