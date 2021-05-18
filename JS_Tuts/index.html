@@ -1,0 +1,10 @@
+<script>
+
+fetch('https://api.covid19india.org/state_district_wise.json').then( (data) => {
+    console.log("ready to fetch data..");
+    return data.json();
+})
+.then( (data) => {
+    console.log(data);
+});
+</script>>
