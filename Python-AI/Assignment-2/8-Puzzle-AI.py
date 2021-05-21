@@ -92,7 +92,6 @@ class PuzzleSolver:
             return True
         return False
 
-
 if __name__ == '__main__':
     start_state = [[2, 0, 3],
                    [1, 8, 4],
