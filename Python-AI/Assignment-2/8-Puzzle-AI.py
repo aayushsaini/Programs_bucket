@@ -110,7 +110,7 @@ if __name__ == '__main__':
     closed = deque()
     opened.append(start_state)
 
-    puzzle.solve(pos, puzzle.edges)
+    puzzle.solve(pos, start_state)
 
     print("Opened: \n", opened, end="\n\n")
     print("Closed: \n", closed, end="\n")
