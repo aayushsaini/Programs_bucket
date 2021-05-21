@@ -38,7 +38,7 @@ class PuzzleSolver:
             self.move_right(copy.deepcopy(board))
             self.move_down(copy.deepcopy(board))
             if(final_state in opened):
-                print("Found",ctr)
+                print("Found: ",ctr)
                 return
             print("Opened: ", opened)
             current_state = opened.popleft()
