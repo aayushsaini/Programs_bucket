@@ -1,5 +1,6 @@
 from collections import deque
 import copy
+from typing import final
 
 class PuzzleSolver:
     def __init__(self, edges, cursor):
@@ -23,7 +24,7 @@ class PuzzleSolver:
                 print(" ",board[i][j], end=" ")
             print("\n")
 
-    def solve(self, pos, current_state):
+    def solve(self, current_state):
         ctr = 0
         print("Opened: ", opened)
         current_state = opened.popleft()
@@ -39,6 +40,8 @@ class PuzzleSolver:
             self.move_down(copy.deepcopy(board))
             if(final_state in opened):
                 print("Found: ",ctr)
+                # opened.remove(final_state)
+                closed.append(final_state)
                 return
             print("Opened: ", opened)
             current_state = opened.popleft()
@@ -48,7 +51,6 @@ class PuzzleSolver:
 
     def move_left(self, board):
         pos = self.get_pos(board)
-        # print("ML: ",pos)
         if (pos[1] != 0):
             board[pos[0]][pos[1]], board[pos[0]][pos[1]-1] = self.swapper( board[pos[0]][pos[1]], board[pos[0]][pos[1]-1])
             if board not in opened:
@@ -60,7 +62,6 @@ class PuzzleSolver:
         
     def move_up(self, board):
         pos = self.get_pos(board)
-        # print("MR: ",pos)
         if (pos[0] != 0):
             board[pos[0]][pos[1]], board[pos[0]-1][pos[1]] = self.swapper( board[pos[0]][pos[1]], board[pos[0]-1][pos[1]])
             if board not in opened:
@@ -102,7 +103,6 @@ if __name__ == '__main__':
 
     puzzle = PuzzleSolver(start_state, 0)
 
-    pos = puzzle.get_pos(start_state)
     print("\nInitial board: ")
     puzzle.print_board(start_state)
 
@@ -110,7 +110,7 @@ if __name__ == '__main__':
     closed = deque()
     opened.append(start_state)
 
-    puzzle.solve(pos, start_state)
+    puzzle.solve(start_state)
 
     print("Opened: \n", opened, end="\n\n")
     print("Closed: \n", closed, end="\n")
