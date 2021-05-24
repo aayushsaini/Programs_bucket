@@ -1,3 +1,4 @@
+#Brute force approach
 routes = []
 
 def find_paths(node, cities, path, distance):
