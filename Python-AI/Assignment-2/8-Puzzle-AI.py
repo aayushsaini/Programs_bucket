@@ -1,6 +1,5 @@
 from collections import deque
 import copy
-from typing import final
 
 class PuzzleSolver:
     def __init__(self, edges, cursor):
@@ -14,14 +13,10 @@ class PuzzleSolver:
                 pos = (i, j.index(self.cursor))
         return pos
 
-    def swapper(self, a, b):
-        a,b = b,a
-        return a,b
-
     def print_board(self, board):
         for i in range(len(board)):
             for j in range(len(board)):
-                print(" ",board[i][j], end=" ")
+                print(" ", board[i][j], end=" ")
             print("\n")
 
     def solve(self, current_state):
@@ -52,7 +47,7 @@ class PuzzleSolver:
     def move_left(self, board):
         pos = self.get_pos(board)
         if (pos[1] != 0):
-            board[pos[0]][pos[1]], board[pos[0]][pos[1]-1] = self.swapper( board[pos[0]][pos[1]], board[pos[0]][pos[1]-1])
+            board[pos[0]][pos[1]], board[pos[0]][pos[1]-1] = board[pos[0]][pos[1]-1], board[pos[0]][pos[1]]
             if board not in opened:
                 print("\nLeft Move: ")
                 self.print_board(board)
@@ -63,7 +58,7 @@ class PuzzleSolver:
     def move_up(self, board):
         pos = self.get_pos(board)
         if (pos[0] != 0):
-            board[pos[0]][pos[1]], board[pos[0]-1][pos[1]] = self.swapper( board[pos[0]][pos[1]], board[pos[0]-1][pos[1]])
+            board[pos[0]][pos[1]], board[pos[0]-1][pos[1]] = board[pos[0]-1][pos[1]], board[pos[0]][pos[1]]
             if board not in opened:
                 print("\nUp Move: ")
                 self.print_board(board)
@@ -74,7 +69,7 @@ class PuzzleSolver:
     def move_right(self, board):
         pos = self.get_pos(board)
         if (pos[1] != len(board[0])-1):
-            board[pos[0]][pos[1]], board[pos[0]][pos[1]+1] = self.swapper( board[pos[0]][pos[1]], board[pos[0]][pos[1]+1])
+            board[pos[0]][pos[1]], board[pos[0]][pos[1]+1] = board[pos[0]][pos[1]+1], board[pos[0]][pos[1]]
             if board not in opened:
                 print("\nRight Move: ")
                 self.print_board(board)
@@ -85,7 +80,7 @@ class PuzzleSolver:
     def move_down(self, board):
         pos = self.get_pos(board)
         if (pos[0] != len(board[0])-1):
-            board[pos[0]][pos[1]], board[pos[0]+1][pos[1]] = self.swapper( board[pos[0]][pos[1]], board[pos[0]+1][pos[1]])
+            board[pos[0]][pos[1]], board[pos[0]+1][pos[1]] = board[pos[0]+1][pos[1]], board[pos[0]][pos[1]]
             if board not in opened:
                 print("\nDown Move: ")
                 self.print_board(board)

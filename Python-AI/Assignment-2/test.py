@@ -1,86 +1,103 @@
-#!/usr/bin/python3
+import math
+maxsize = float('inf')
 
-import random
-import sys
+def copyToFinal(curr_path):
+	final_path[:N + 1] = curr_path[:]
+	final_path[N] = curr_path[0]
 
-class Puzzle:
+def firstMin(adj, i):
+	min = maxsize
+	for k in range(N):
+		if adj[i][k] < min and i != k:
+			min = adj[i][k]
 
-    def __init__(self):
-        self.emoji=['**','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15']
-        self.board=list(range(16))
-        self.input=""
-        self.counter=0
-        self._randomize()
-        pass
+	return min
 
-    def _randomize(self):
-        random.shuffle(self.board)
-        newboard=[]
-        minboard=[]
-        for i in range(4):
-            for j in range(4):
-                minboard.append(self.board[4*i+j])
-            newboard.append(minboard)
-            minboard=[]
-        self.board=newboard
+def secondMin(adj, i):
+	first, second = maxsize, maxsize
+	for j in range(N):
+		if i == j:
+			continue
+		if adj[i][j] <= first:
+			second = first
+			first = adj[i][j]
 
+		elif(adj[i][j] <= second and
+			adj[i][j] != first):
+			second = adj[i][j]
 
-    def get_input(self):
-        self.counter+=1
-        print("------"+str(self.counter)+"-------")
-        self.input=input("->")
+	return second
 
-    def react(self):
-        row_x= [(index) for (index,item) in enumerate(self.board) if 0 in item][0]
-        transpose=[list(x) for x in zip(*self.board)]
-        col_x= [(index) for (index,item) in enumerate(transpose) if 0 in item][0]
+def TSPRec(adj, curr_bound, curr_weight,
+			level, curr_path, visited):
+	global final_res
+	
+	if level == N:
+		if adj[curr_path[level - 1]][curr_path[0]] != 0:
+			curr_res = curr_weight + adj[curr_path[level - 1]]\
+										[curr_path[0]]
+			if curr_res < final_res:
+				copyToFinal(curr_path)
+				final_res = curr_res
+		return
         
-        if self.input=='4':
-            row_x_0=[i for i,j in enumerate(self.board[row_x]) if j==0][0]
-            if row_x_0 != 0:
-                self.board[row_x].remove(0)
-                self.board[row_x].insert(row_x_0-1,0)
+	for i in range(N):
+		if (adj[curr_path[level-1]][i] != 0 and
+							visited[i] == False):
+			temp = curr_bound
+			curr_weight += adj[curr_path[level - 1]][i]
+			if level == 1:
+				curr_bound -= ((firstMin(adj, curr_path[level - 1]) + firstMin(adj, i)) / 2)
+			else:
+				curr_bound -= ((secondMin(adj, curr_path[level - 1]) + firstMin(adj, i)) / 2)
+			if curr_bound + curr_weight < final_res:
+				curr_path[level] = i
+				visited[i] = True
+                
+				TSPRec(adj, curr_bound, curr_weight,
+					level + 1, curr_path, visited)
+                    
+			curr_weight -= adj[curr_path[level - 1]][i]
+			curr_bound = temp
+            
+			visited = [False] * len(visited)
+			for j in range(level):
+				if curr_path[j] != -1:
+					visited[curr_path[j]] = True
 
-        elif self.input=='6':
-            row_x_0=[i for i,j in enumerate(self.board[row_x]) if j==0][0]
-            if row_x_0 != 3:
-                self.board[row_x].remove(0)
-                self.board[row_x].insert(row_x_0+1,0)
-
-        elif self.input=='8':
-            col_x_0=[i for i,j in enumerate(transpose[col_x]) if j==0][0]
-            if col_x_0 != 0:
-                transpose[col_x].remove(0)
-                transpose[col_x].insert(col_x_0-1,0)
-            self.board=[list(x) for x in zip(*transpose)]
-
-        elif self.input=='2':
-            col_x_0=[i for i,j in enumerate(transpose[col_x]) if j==0][0]
-            if col_x_0 != 3:
-                transpose[col_x].remove(0)
-                transpose[col_x].insert(col_x_0+1,0)
-            self.board=[list(x) for x in zip(*transpose)]
+def TSP(adj):
     
-    def draw(self):
-        for row in self.board:
-            for j in range(4):
-                print(' '+ self.emoji[ row[j] ] ,end='')
-            print("\n")
+	curr_bound = 0
+	curr_path = [-1] * (N + 1)
+	visited = [False] * N
 
-    def end(self):
-        print("The End.")
+	for i in range(N):
+		curr_bound += (firstMin(adj, i) +
+					secondMin(adj, i))
+
+	curr_bound = math.ceil(curr_bound / 2)
     
-    def emoji(self,index):
-        print(' '+self.emoji[index])
+	visited[0] = True
+	curr_path[0] = 0
+    
+	TSPRec(adj, curr_bound, 0, 1, curr_path, visited)
+    
+adj = [[0, 10, 15, 20],
+	[10, 0, 35, 25],
+	[15, 35, 0, 30],
+	[20, 25, 30, 0]]
+N = 4
 
-    def can_exit(self):
-        return (False if self.input =="q" else True)
+final_path = [None] * (N + 1)
 
-if __name__=="__main__":
-    p=Puzzle()
-    print('Press any key 2468q')
-    while p.can_exit():
-        p.get_input()
-        p.react()
-        p.draw()
-    p.end()
+visited = [False] * N
+
+
+final_res = maxsize
+
+TSP(adj)
+
+print("Minimum cost :", final_res)
+print("Path Taken : ", end = ' ')
+for i in range(N + 1):
+	print(final_path[i], end = ' ')
