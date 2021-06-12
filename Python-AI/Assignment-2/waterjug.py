@@ -1,6 +1,6 @@
-j1 = 50
+j1 = 5
 j2 = 3
-t = 40
+t = 4
 
 def jugSolver(w1,w2):
 
@@ -35,5 +35,5 @@ def jugSolver(w1,w2):
     # else:
     #     jugSolver(j1,w2)
 
-jugSolver(50,0)
+jugSolver(5,3)
 

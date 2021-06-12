@@ -1,19 +1,3 @@
-
-start_state     = [[1, 2, 3],
-                   [8, " ", 4],
-                   [7, 6, 5]]
-
-final_state      = [[8, 1, 3],
-                    [" ", 2, 4],
-                    [7, 6, 5]]
-
-"""final_state      = [[2, 8, 1],
-                   [" ", 4, 3],
-                   [7, 6, 5]]
-"""
-
-
-
 global stack
 global visited
 
@@ -162,6 +146,17 @@ def fun(cs):
         else:
             tempState = desi[min(desi)].pop(0)
             return fun(tempState)
+
+
+start_state     = [[1, 2, 3],
+                   [8, " ", 4],
+                   [7, 6, 5]]
+
+final_state      = [[8, 1, 3],
+                    [" ", 2, 4],
+                    [7, 6, 5]]
+
+
 
 print("  Y :  ", fun(start_state))
 print("Visited States : ", visited)

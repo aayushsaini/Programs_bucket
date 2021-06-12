@@ -97,15 +97,12 @@ if __name__ == '__main__':
                    [7, 6, 5]]
 
     puzzle = PuzzleSolver(start_state, 0)
-
+    
     print("\nInitial board: ")
     puzzle.print_board(start_state)
-
     opened = deque()
     closed = deque()
     opened.append(start_state)
-
     puzzle.solve(start_state)
-
     print("Opened: \n", opened, end="\n\n")
     print("Closed: \n", closed, end="\n")
